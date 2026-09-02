@@ -234,6 +234,70 @@ app.put('/books/:id',(req,res) => {
         })
 })
 
+app.patch('/books/:id',(req,res)=> {
+    const id = req.params.id;
+    let objectId;
+    try {
+        objectId = new ObjectId(id);
+    }
+    catch (error){
+        res.status(500)
+            .json({message:'invalid ID'});
+        return;
+    }
+    const updates =req.body;
+
+    // check the length of the json sent from the client , if empty , then error response
+    console.log("keys " + Object.keys(updates).length);
+    if(Object.keys(updates).length === 0 ){
+        res.status(400)
+            .json({error:'Json is empty , min 1 field should be sent '});
+        return;
+    }
+
+    const allowedFields = ['title','author','pages','price'];
+    const invalidFields =Object.keys(updates).filter(key => !allowedFields.includes(key));
+    if(invalidFields.length > 0 ){
+        res.status(400)
+            .json({error:`Invalid Fields ${invalidFields.join(", ")}`})
+        return;
+    }
+
+    //
+    if (updates.title !== undefined && typeof updates.title !== "string"){
+        res.status(400)
+            .json({error:'Title must be a string'});
+        return;
+    }
+    if (updates.author !== undefined && typeof updates.author !== "string"){
+        res.status(400)
+            .json({error:'author must be a string'});
+        return;
+    }
+    if (updates.price !== undefined &&( typeof updates.price !=="number" || updates.price < 0) ){
+        res.status(400).json({error:'pages must be a number or  > 0 '});
+        return;
+    }
+    if (updates.pages !== undefined &&( typeof updates.pages !=="number" || updates.pages < 0) ){
+        res.status(400).json({error:'pages must be a number or >0 '});
+        return;
+    }
+
+    const db = getDB();
+    const collection =db.collection('books');
+    collection.updateOne({_id:objectId},{$set:updates})
+        .then((result)=> {
+            res.json({
+                message:"partially updated successfully",
+                result:result.modifiedCount
+            });
+        })
+        .catch(error=> {
+            res.status(500)
+                .json({error:'Error while updating the book'})
+        })
+})
+
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');
 })
