@@ -168,6 +168,72 @@ app.delete('/books/:id',(req,res) => {
         })
 });
 
+// PUT Request
+
+
+app.put('/books/:id',(req,res) => {
+    const id =req.params.id;
+    let objectId;
+    try{
+        objectId = new ObjectId(id);
+    }
+    catch (error){
+        res.status(500)
+            .json({error:'Invalid ID'});
+        return;
+    }
+
+    console.log(id);
+    console.log(objectId);
+    const {title,author,pages,price}=req.body;
+
+    // body should contain all properties title , author , pages, price
+    // title and author should be from type string  && pages , price should from type numer
+    // pages & price should not be < 0
+
+    if (!title || ! author || !pages || !price ){
+        res.status(400)
+            .json({message:'title ,author , price and page are required '});
+        return;
+    }
+
+    if (typeof title !== "string" || typeof author !== "string"){
+        res.status(400)
+            .json({message:'title , author should be from type string'});
+        return;
+    }
+
+    if (typeof pages !=="number" || typeof price !== "number"){
+        res.status(400)
+            .json({message:'pages and price should be from type number'});
+        return;
+    }
+    if (pages < 0 || price < 0 ){
+        res.status(400)
+            .json({message:'pages or price are < 0 '});
+        return;
+    }
+    const updatedBook= {title,author,pages,price};
+
+    const db = getDB();
+    const collection =db.collection('books');
+    collection.replaceOne({_id:objectId},updatedBook)
+        .then((result) => {
+            if(result.matchedCount===0){
+                res.status(404)
+                    .json({message:'Book not found'})
+            }
+            else {
+                res.status(200)
+                    .json(result);
+            }
+        })
+        .catch((error)=>{
+            res.status(500)
+                .json({error:'Error while updating the book'})
+        })
+})
+
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');
 })
