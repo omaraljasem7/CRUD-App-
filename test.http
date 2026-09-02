@@ -1,0 +1,111 @@
+### GET request to server
+GET http://localhost:3000/
+
+### GET request to /about
+GET http://localhost:3000/about
+
+
+### GET request to /books result json with all books
+
+GET http://localhost:3000/books
+
+### GET request to /books/:id result is json object of that book with validation
+GET http://localhost:3000/books/test
+### result not a valid id as json response
+
+
+### GET request to /books/:id with a valid id of 24 HEX digits but book for that ID is not in collection
+GET http://localhost:3000/books/0000abcd0000abcd0000abcd
+
+### GET requst to /books/:id with an valid id that exists in the collection books
+
+GET http://localhost:3000/books/6a97be003d0560efc4ba1751
+
+### POST request to /books
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+  "title":"test Book",
+  "author": "omar ",
+  "price": 15,
+  "year": 2025,
+  "genres":["Programming","Fantasy"],
+  "publisher":{
+    "name":"me",
+    "country":"SY"
+  }
+
+}
+
+
+### POST request to /booksvalidate should contain title , author , pages and price
+### title and author should be from type string , pages and price of type number and > 0
+POST http://localhost:3000/booksvalid
+Content-Type: application/json
+
+{
+  "title":"Clean Code ",
+  "author":"Omar Author",
+  "pages":431,
+  "price":35
+}
+
+### Test validation
+POST http://localhost:3000/booksvalid
+Content-Type: application/json
+
+{
+  "title":"Clean Code ",
+  "author":"Omar Author",
+  "pages":431
+}
+
+### Test validation
+
+POST http://localhost:3000/booksvalid
+Content-Type: application/json
+
+{
+  "title":true,
+  "author":"Omar Author",
+  "pages":431,
+  "price": 55
+}
+
+### TEST VALIDATION
+POST http://localhost:3000/booksvalid
+Content-Type: application/json
+
+{
+  "title":true,
+  "author":"Omar Author",
+  "pages":-431,
+  "price": -55
+}
+
+
+### DELETE request to an existing resourse, response book successfully deleted as json
+
+DELETE  http://localhost:3000/books/6a98541059d6652f48ec9443
+
+
+### DELETE Request with valid id but not an existing resourse
+
+DELETE  http://localhost:3000/books/0000abcd0000abcd0000abcd
+
+### DELETE Request with not a valid id
+
+DELETE  http://localhost:3000/books/test
+
+### PUT request to update a resource completly
+PUT  http://localhost:3000/books/6a98504d59d6652f48ec9442
+Content-Type: application/json
+
+{
+  "title":"test book 2",
+  "author":  "test author",
+  "price":123,
+  "pages":1234
+
+}
