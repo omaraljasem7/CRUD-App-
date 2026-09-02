@@ -68,6 +68,20 @@ app.get('/books/:id',(req,res)=> {
 
 })
 
+app.post('/books',(req,res)=> {
+    const book = req.body;
+    console.log(book);
+    const db = getDB();
+    const collection =db.collection('books');
+    collection.insertOne(book)
+        .then((result)=> {
+            res.status(201).json({result:result});
+        })
+        .catch((error)=> {
+            res.status(500).json({error:'Error while inserting book'})
+        })
+});
+
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');
 })
