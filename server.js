@@ -129,6 +129,45 @@ app.post('/booksvalid', (req,res)=> {
 
 })
 
+
+// DELETE Request
+app.delete('/books/:id',(req,res) => {
+    const param = req.params.id;
+    console.log(param);
+    let id ;
+    try {
+        id = new ObjectId(param);
+        console.log(id);
+    }
+    catch (error){
+        res.status(500)
+            .json({error:'Invalid ID '});
+        return;
+    }
+
+    // connect to db
+    const db = getDB();
+    // connect to collection
+    const collection = db.collection('books');
+    collection.deleteOne({_id:id})
+        .then((result) => {
+            if (result.deletedCount === 0){
+                res.status(404)
+                    .json({error:'Book is not found'});
+
+            }
+            else {
+                res.status(200).json({
+                    message:'Book deleted successfully'
+                });
+            }
+        })
+        .catch( (error) => {
+            res.status(500)
+                .json({error:'Error while deleting the book'})
+        })
+});
+
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');
 })
