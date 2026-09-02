@@ -296,7 +296,38 @@ app.patch('/books/:id',(req,res)=> {
             res.status(500)
                 .json({error:'Error while updating the book'})
         })
-})
+});
+
+// pagination route to get all books for certain page and certain limit with 2 query parameters
+
+app.get('/pagination',(req,res) => {
+   const page=parseInt(req.query.page)|| 1;
+   const limit = parseInt(req.query.limit) || 2 ;
+   /*
+    console.log(page);
+    console.log(limit);
+    console.log(typeof page);
+    console.log(typeof limit);
+    */
+    const skip = (page -1 ) * limit;
+
+    const db =getDB();
+    const collection = db.collection("books");
+
+    collection.find().skip(skip).limit(limit).toArray()
+        .then((result) => {
+            res.json({
+                page:page,
+                limit:limit,
+                books:result
+            })
+        })
+        .catch(error=> {
+            res.status(500)
+                .json({error:'Error while updating the book'});
+        })
+
+});
 
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');

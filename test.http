@@ -109,3 +109,44 @@ Content-Type: application/json
   "pages":1234
 
 }
+
+
+### PATCH requst to partially update a resource
+
+PATCH http://localhost:3000/books/6a982a967c9406f469bd63ea
+Content-Type: application/json
+
+{
+  "title":"my title",
+  "author":"my author"
+}
+
+#### PATCH with invalid properties in in the json
+PATCH  http://localhost:3000/books/6a982a967c9406f469bd63ea
+Content-Type: application/json
+
+{
+  "title":"test 1 ",
+  "author":"test 1 ",
+  "foo": "test foo"
+}
+
+
+### You can also test the types of title , author , pages ,price and that the values of price and pages > 0
+
+
+### test pagination
+### GET first 2 books of page 1
+GET http://localhost:3000/pagination?page=1&limi=2
+
+
+### GET next 2 books of page 1
+
+GET http://localhost:3000/pagination?page=2&limi=2
+
+### GET next 2 books  of page 3
+GET http://localhost:3000/pagination?page=3 &limi=2
+
+
+### GET dafault page and default limit with no query parameter
+GET http://localhost:3000/pagination
