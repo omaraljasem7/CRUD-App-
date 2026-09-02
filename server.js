@@ -82,6 +82,53 @@ app.post('/books',(req,res)=> {
         })
 });
 
+app.post('/booksvalid', (req,res)=> {
+    const {title,author,pages,price}=req.body;
+    // first check if properties are there in the json object from the client sent by postman
+    // if sent then for example title will have a value otherwise it will be undefined
+
+    if (!title || !author || !pages || !price ){
+        res.status(400).json({error:"title, author pages ,price are required"})
+        return;
+    }
+
+    // check if title and author are from type string
+
+    if(typeof title !== "string" || typeof author !== "string"){
+        res.status(400)
+            .json({error:"title,author should be from type string"})
+        return;
+    }
+    // check if pages and price are from typ number
+
+    if(typeof pages !== "number" || typeof price !== "number"){
+        res.status(400)
+            .json({error:"pages and price should be from type number"})
+        return;
+    }
+    // pages and price should not be < 0
+    if (pages < 0 || price < 0 ){
+        res.status(400)
+            .json({error:"pages and price should be > 0 "})
+        return;
+    }
+
+    const newBook= {title,author,pages,price};
+
+    const db= getDB();
+    const collection=db.collection('books');
+    collection.insertOne(newBook)
+        .then((result)=>{
+            res.status(201)
+                .json({result:result});
+        })
+        .catch((error)=>{
+            res.status(500)
+                .json({error:`Error while inserting book in route ${req.route.path}`})
+        })
+
+})
+
 app.use((req,res)=>{
     res.status(404).send('Not Found Page');
 })
