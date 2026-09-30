@@ -1,6 +1,7 @@
 import {MongoClient} from 'mongodb';
-
-const uri= "mongodb://localhost:27017/"
+import dotenv from 'dotenv';
+dotenv.config();
+const uri= process.env.MONGO_URI;
 let db;
 
 const client = new MongoClient(uri);
