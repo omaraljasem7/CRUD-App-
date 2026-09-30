@@ -5,7 +5,11 @@ const priceInput=document.getElementById('price');
 const saveBtn= document.getElementById('save-btn');
 const cancelBtn=document.getElementById('cancel-btn');
 const errorDiv = document.getElementById("error-message");
-
+//auth Guard
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href='login.html';
+}
 function showError(message) {
     errorDiv.textContent = message;
     errorDiv.style.display = "block";
@@ -30,7 +34,10 @@ function addBook(){
     }
     fetch("http://localhost:3000/books",{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":`Bearer ${localStorage.getItem('token')}`
+        },
         body:JSON.stringify({title,author,pages,price})
     })
         .then((response) => {

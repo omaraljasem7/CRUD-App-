@@ -9,6 +9,12 @@ const saveBtn = document.getElementById("save-btn");
 const cancelBtn = document.getElementById("cancel-btn");
 const errorDiv = document.getElementById("error-message");
 
+// Auth Guard
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href='login.html';
+}
+
 function showError(message) {
     errorDiv.textContent = message;
     errorDiv.style.display = "block";
@@ -29,8 +35,8 @@ function loadBook() {
             return response.json();
         })
         .then((book) => {
-            console.log(book);
-            console.log(("book " +book.title+book.author+book.pages));
+            //console.log(book);
+            //console.log(("book " +book.title+book.author+book.pages));
             titleInput.value = book.title ;
             authorInput.value = book.author ;
             pagesInput.value = book.pages ;
@@ -54,7 +60,10 @@ function updateBook() {
     }
     fetch(`http://localhost:3000/books/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":`Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify({ title, author, pages, price })
     })
         .then((response) => {

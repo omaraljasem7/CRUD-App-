@@ -4,10 +4,18 @@ const nextBtn=document.getElementById('next-btn');
 const pageInfo= document.getElementById('page-info');
 const addBtn= document.getElementById('add-btn');
 
+//logout Button
+
+const logoutBtn=document.getElementById('logout-btn');
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href='login.html';
+}
+
 let currentPage=1;
 let limit = 2;
 
-console.log(bookList);
+//console.log(bookList);
 // without pagination
 /*
 function getAllBooks(){
@@ -65,7 +73,11 @@ function getAllBooks(){
 }
 function deleteBook(id){
     fetch(`http://localhost:3000/books/${id}`,{
-        method:'DELETE'
+        method:'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
     })
         .then(response => {
             return response.json();
@@ -111,5 +123,10 @@ prevBtn.addEventListener('click',()=> {
 // Event on Btn to redirect to a new Page
 addBtn.addEventListener('click' , () => {
     window.location.href="add.html";
+})
+// when you logout delete token from localstorage
+logoutBtn.addEventListener('click',() => {
+    localStorage.removeItem('token');
+    window.location.href='login.html';
 })
 getAllBooks();
