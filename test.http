@@ -100,3 +100,39 @@ GET http://localhost:3000/pagination?page=3 &limi=2
 
 ### GET dafault page and default limit with no query parameter
 GET http://localhost:3000/pagination
+
+
+### POST request for registertion /auth/register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "password123"
+}
+### POST request for /auth/login
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "password123"
+}
+
+### WITH the Token , you can do POST , PUT ,PATCH , DELETE
+POST http://localhost:3000/books
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmQwMGFiZDBjNTYzMDU0MjNhNmExMyIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTc5MDc3MTUzMywiZXhwIjoxNzkwNzc1MTMzfQ.mfFlQ5M4Gm7ZddOXtQvbkBrRRW94K2efCk_RU88MD8M
+Content-Type: application/json
+
+{
+  "title" : "My Book",
+  "author": "Arthur C.Clark",
+  "price": 12.99,
+  "pages": 255
+}
+
+### DELETE REQUEST with a valid token
+
+DELETE http://localhost:3000/books/6abd0389d0c56305423a6a16
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYmQwMGFiZDBjNTYzMDU0MjNhNmExMyIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTc5MDc3MTUzMywiZXhwIjoxNzkwNzc1MTMzfQ.mfFlQ5M4Gm7ZddOXtQvbkBrRRW94K2efCk_RU88MD8M

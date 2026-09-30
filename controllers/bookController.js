@@ -55,37 +55,8 @@ function createBook(req,res){
 }
 function createBookValid(req,res){
     const {title,author,pages,price}=req.body;
-    // first check if properties are there in the json object from the client sent by postman
-    // if sent then for example title will have a value otherwise it will be undefined
-
-    if (!title || !author || !pages || !price ){
-        res.status(400).json({error:"title, author pages ,price are required"})
-        return;
-    }
-
-    // check if title and author are from type string
-
-    if(typeof title !== "string" || typeof author !== "string"){
-        res.status(400)
-            .json({error:"title,author should be from type string"})
-        return;
-    }
-    // check if pages and price are from typ number
-
-    if(typeof pages !== "number" || typeof price !== "number"){
-        res.status(400)
-            .json({error:"pages and price should be from type number"})
-        return;
-    }
-    // pages and price should not be < 0
-    if (pages < 0 || price < 0 ){
-        res.status(400)
-            .json({error:"pages and price should be > 0 "})
-        return;
-    }
-
+    //validation is now done using JOI middleware
     const newBook= {title,author,pages,price};
-
     const db= getDB();
     const collection=db.collection('books');
     collection.insertOne(newBook)
@@ -164,27 +135,7 @@ function updateBook(req,res){
             .json({error:`Invalid Fields ${invalidFields.join(", ")}`})
         return;
     }
-
-    //
-    if (updates.title !== undefined && typeof updates.title !== "string"){
-        res.status(400)
-            .json({error:'Title must be a string'});
-        return;
-    }
-    if (updates.author !== undefined && typeof updates.author !== "string"){
-        res.status(400)
-            .json({error:'author must be a string'});
-        return;
-    }
-    if (updates.price !== undefined &&( typeof updates.price !=="number" || updates.price < 0) ){
-        res.status(400).json({error:'pages must be a number or  > 0 '});
-        return;
-    }
-    if (updates.pages !== undefined &&( typeof updates.pages !=="number" || updates.pages < 0) ){
-        res.status(400).json({error:'pages must be a number or >0 '});
-        return;
-    }
-
+    // Validation is now done using JOI middleware
     const db = getDB();
     const collection =db.collection('books');
     collection.updateOne({_id:objectId},{$set:updates})
@@ -214,33 +165,7 @@ function replaceBook(req,res){
     console.log(id);
     console.log(objectId);
     const {title,author,pages,price}=req.body;
-
-    // body should contain all properties title , author , pages, price
-    // title and author should be from type string  && pages , price should from type numer
-    // pages & price should not be < 0
-
-    if (!title || ! author || !pages || !price ){
-        res.status(400)
-            .json({message:'title ,author , price and page are required '});
-        return;
-    }
-
-    if (typeof title !== "string" || typeof author !== "string"){
-        res.status(400)
-            .json({message:'title , author should be from type string'});
-        return;
-    }
-
-    if (typeof pages !=="number" || typeof price !== "number"){
-        res.status(400)
-            .json({message:'pages and price should be from type number'});
-        return;
-    }
-    if (pages < 0 || price < 0 ){
-        res.status(400)
-            .json({message:'pages or price are < 0 '});
-        return;
-    }
+    //validation is now done using JOI middleware
     const updatedBook= {title,author,pages,price};
 
     const db = getDB();
