@@ -16,7 +16,7 @@ registerBtn.addEventListener('click', () => {
         showError("please fill all fields");
         return;
     }
-    fetch('http://localhost:3000/auth/register', {
+    fetch('/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username,password})

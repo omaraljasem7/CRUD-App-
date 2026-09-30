@@ -32,7 +32,7 @@ function addBook(){
         showError("price field or pages filed can not be <=0 ");
         return;
     }
-    fetch("http://localhost:3000/books",{
+    fetch("/books",{
         method:"POST",
         headers:{
             "Content-Type":"application/json",

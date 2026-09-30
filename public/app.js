@@ -36,7 +36,7 @@ function getAllBooks(){
 */
 
 function getAllBooks(){
-    fetch(`http://localhost:3000/pagination?page=${currentPage}&limit=${limit}`)
+    fetch(`/pagination?page=${currentPage}&limit=${limit}`)
         .then ((response)=>{
         return response.json();
     })
@@ -72,7 +72,7 @@ function getAllBooks(){
         })
 }
 function deleteBook(id){
-    fetch(`http://localhost:3000/books/${id}`,{
+    fetch(`/books/${id}`, {
         method:'DELETE',
         headers: {
             "Content-Type": "application/json",

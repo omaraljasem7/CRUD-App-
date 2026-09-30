@@ -27,7 +27,7 @@ else{
     loadBook();
 }
 function loadBook() {
-    fetch(`http://localhost:3000/books/${id}`)
+    fetch(`/books/${id}`)
         .then((response) => {
             if(!response.ok){
                 throw new Error("Book not found");
@@ -58,7 +58,7 @@ function updateBook() {
         showError("Please fill in all fields");
         return;
     }
-    fetch(`http://localhost:3000/books/${id}`, {
+    fetch(`/books/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
